@@ -42,6 +42,20 @@ header{
     margin: 2%;
 }
 
+#notify{
+    position: absolute;
+    left: 79%;
+    width: 20%;
+    border: solid black 1px;
+    border-radius: 10px;
+    box-shadow: 10px 10px black;
+    padding: 1%;
+}
+#notify.hide{
+    opacity: 0;
+    transition: 10s;
+}
+
 
 @media (max-width: 1000px) {
     .body{

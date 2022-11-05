@@ -18,7 +18,11 @@ from django.http import HttpResponse
 
 def index(request):
 
-    context={'materiales':Controller.get_all_material().order_by('-fecha_registro')}
+    notify = {
+        'mensaje':'mensaje de notificacion desde backend 2.0',
+        'parametros':'id="notify" style="display:none;"'
+    }
+    context={'materiales':Controller.get_all_material().order_by('-fecha_registro'),'notificacion':notify}
 
     return render(request,"biblioteca/index.html", context)
 

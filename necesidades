@@ -1,8 +1,10 @@
+0. instalar django
 1. instalar mysql comunnity en el computador
 2. tener el perfil:
-    user: root
-    pass: root
+    user: root / sysadmin
+    pass: root / admin
 3. crear base de datos bibliotecadb
 3. instalar mysqlclient
     pip install mysqlclient
+4. py manage.py migrate
 
