@@ -1,0 +1,8 @@
+1. instalar mysql comunnity en el computador
+2. tener el perfil:
+    user: root
+    pass: root
+3. crear base de datos bibliotecadb
+3. instalar mysqlclient
+    pip install mysqlclient
+
