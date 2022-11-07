@@ -43,18 +43,15 @@ header{
 }
 
 #notify{
-    position: absolute;
+    position: fixed;
+    top: 80%;
     left: 79%;
     width: 20%;
     border: solid black 1px;
     border-radius: 10px;
     box-shadow: 10px 10px black;
     padding: 1%;
-}
-#notify.hide{
-    opacity: 0;
-    transition: 10s;
-}
+} 
 
 
 @media (max-width: 1000px) {
@@ -85,6 +82,13 @@ header{
     .options button{
         margin: 2% 0;
     }
+
+    #notify{
+        top:90%;
+        left: 60%;
+        width: 40%;
+
+    }
   }
   @media (max-width: 470px) {
     .body{
@@ -93,5 +97,12 @@ header{
     
     .id_product_input{
         margin: 40% 0 2.5% 0;
+    }
+
+    #notify{
+        top:85%;
+        left: 60%;
+        width: 40%;
+
     }
   }

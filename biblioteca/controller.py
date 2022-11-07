@@ -62,16 +62,13 @@ class Controller:
         usuario = Controller.validar_existencia(Usuario,cedula)
 
         if(not usuario):
-            print('Usuario no encontrado')
-            return False
+            return {'status':False,'mensaje':'Usuario no encontrado'}
 
         if(usuario.prestamos_actuales > 0):
-            print('El usuario debe devolver todos los materiales que tenga en su poder')
-            return False
+            return {'status':False,'mensaje':'El usuario debe devolver todos los materiales que tenga en su poder'}
 
         usuario.delete()
-        print('Usuario eliminado satisfactoriamente')
-        return True
+        return {'status':True,'mensaje':'Usuario eliminado satisfactoriamente'}
 
 
     def prestamo(id,cc,cant:int):
@@ -81,20 +78,19 @@ class Controller:
         usuario = Controller.validar_existencia(Usuario,cc)
         cant = int(cant)
         if(not material):
-            print('Material no encontrado')
-            return False
+            return {'status':False,'mensaje':'Material no encontrado'}
 
         if(not usuario):
-            print('Usuario no encontrado')
-            return False
+            print('')
+            return {'status':False,'mensaje':'Usuario no encontrado'}
+
 
         if(usuario.cant_max < cant or usuario.prestamos_actuales + cant > usuario.cant_max):
-            print('El usuario no puede prestar ese cantidad de recursos')
-            return False
+            return {'status':False,'mensaje':'El usuario no puede prestar ese cantidad de recursos'}
+            
         
         if(material.cant_actual < cant):
-            print('No hay suficiente material')
-            return False
+            return {'status':False,'mensaje':'No hay suficiente material'}
 
         material.cant_actual-= cant
         usuario.prestamos_actuales+= cant
@@ -104,7 +100,8 @@ class Controller:
         nuevo_registro.save()
         material.save()
         usuario.save()
-        return "Prestamo realizado con exito"
+        return {'status':True,'mensaje':"Prestamo realizado con exito"}
+
 
 
     
@@ -116,20 +113,19 @@ class Controller:
         cant = int(cant)
 
         if(not material):
-            print('Material no encontrado')
-            return False
+            return {'status':False,'mensaje':'Material no encontrado'}
+
 
         if(not usuario):
             print('Usuario no encontrado')
-            return False
+            return {'status':False,'mensaje':'Usuario no encontrado'}
 
         if(usuario.cant_max < cant):
-            print('El usuario no puede tener esa cantidad de libros en su poder')
-            return False
-        
+            print('')
+            return {'status':False,'mensaje':'El usuario no puede tener esa cantidad de libros en su poder'}
+
         if(material.cant_actual + cant > material.cant_registrada):
-            print('El usuario está entregando mas materiales de los posibles')
-            return False
+            return {'status':False,'mensaje':'El usuario está entregando mas materiales de los posibles'}
 
         material.cant_actual+= cant
         usuario.prestamos_actuales-= cant 
@@ -139,22 +135,22 @@ class Controller:
         nuevo_registro.save()
         material.save()
         usuario.save()
-        return "Devolucion realizada con exito"
+        return {'status':True,'mensaje':'Devolucion realizada con exito'}
+
 
     def incrementar_cantidad(id,cantidad:int):
 
         material = Controller.validar_existencia(Material,id)
 
         if(not material):
-            print('material no existente')
-            return False
+            return {'status':False,'mensaje':'material no existente'}
         
         material.cant_registrada = material.cant_registrada + cantidad
         material.cant_actual =  material.cant_actual + cantidad
 
-        print("Material registrado con exito")
         material.save()
-        return True
+        return {'status':True,'mensaje':'Material registrado con exito'}
+
 
     def ver_historial():
         return Registro.objects.all()

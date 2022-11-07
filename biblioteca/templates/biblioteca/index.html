@@ -21,6 +21,7 @@
                 producto</button>
             <button type="button" class="btn btn-dark" data-target="#persona_modal" data-toggle="modal">Opciones
                 usuario</button>
+            
         </section>
 
 
@@ -33,6 +34,11 @@
                 <input type="text" class="form-control-lg id_product_input" name="id" placeholder="Id producto">
                 <input type="submit" value="Buscar" class="btn btn-primary search_btn">
             </form>
+
+            <form id="ver_historial_btn" action="historial" method="post">
+                {% csrf_token %}
+                <input type="submit" value="ver historial" class="btn btn-dark">
+            </form>
         </div>
 
         <div class="row">
@@ -42,7 +48,8 @@
                     <h2 class="card-title">{{material.titulo}} - {{material.id}}</h2>
                     <caption class="card-subtitle"># de existencias: {{material.cant_actual}}</caption>
                 </div>
-                <button class="btn btn-info btn-prestar">Gestionar</button>
+                <button class="btn btn-info btn-prestar" data-target="#gestionar_modal" data-toggle="modal"
+                    onclick="pasarID('{{material.id}}')">Gestionar</button>
 
             </div>
             {% endfor %}
@@ -121,41 +128,108 @@
         </div>
     </div>
 
-    <h2>registrar prestamos</h2>
-    <form action="addPrestamo" method="post">
-        {% csrf_token %}
-        <input type="text" placeholder="Id material" name="id_material" required>
-        <input type="text" placeholder="Cedula" name="cc" required>
-        <input type="number" placeholder="numero de ejemplares" name="cant">
-        <input type="submit" value="registrar">
-    </form>
+    <!-- Modal -->
+    <div class="modal fade" id="gestionar_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Gestion del recurso</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div role="tabpanel">
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation">
+                                <a href="#prestar_tab" class="btn" aria-controls="prestar_tab" role="tab"
+                                    data-toggle="tab">Prestar</a>
 
-    <h2>registrar devolucion</h2>
-    <form action="addDevol" method="post">
-        {% csrf_token %}
-        <input type="text" placeholder="Id material" name="id_material" required>
-        <input type="text" placeholder="Cedula" name="cc" required>
-        <input type="number" placeholder="numero de ejemplares" name="cant">
-        <input type="submit" value="registrar">
-    </form>
+                            </li>
+                            <li role="presentation">
+                                <a href="#devolver_tab" class="btn" aria-controls="devolver_tab" role="tab"
+                                    data-toggle="tab">Devolver</a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#anadir_tab" class="btn" aria-controls="anadir_tab" role="tab"
+                                    data-toggle="tab">Añadir</a>
+                            </li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="prestar_tab">
+
+                                <h2>registrar prestamos</h2>
+                                <form action="addPrestamo" method="post" class="form-group">
+                                    {% csrf_token %}
+                                    <label for="id_material">Id del material:</label>
+                                    <input type="text" class="form-control" id="id_material" placeholder="Id material"
+                                        name="id_material" readonly required>
+                                    <label for="cc">CC del usuario:</label>
+                                    <input type="text" id="cc" class="form-control" placeholder="Cedula" name="cc"
+                                        required>
+
+                                    <label for="n_ejemplares">Cantidad ejemplares:</label>
+                                    <input type="number" id="n_ejemplares" class="form-control"
+                                        placeholder="numero de ejemplares" name="cant">
+                                    <br>
+                                    <input type="submit" value="registrar" class="form-control">
+                                </form>
 
 
-    <h2>añadir material</h2>
-    <form action="addMaterial" method="post">
-        {% csrf_token %}
-        <input type="text" placeholder="Id material" name="id_material" required>
-        <input type="number" placeholder="cantidad por añadir" name="cant">
-        <input type="submit" value="registrar">
-    </form>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="devolver_tab">
+
+                                <h2>registrar devolucion</h2>
+                                <form action="addDevol" method="post" class="form-group">
+                                    {% csrf_token %}
+                                    <label for="id_material">Id del material:</label>
+                                    <input type="text" class="form-control" id="id_material" placeholder="Id material"
+                                        name="id_material" required readonly>
+                                    <label for="cc">CC del usuario:</label>
+                                    <input type="text" id="cc" class="form-control" placeholder="Cedula" name="cc"
+                                        required>
+
+                                    <label for="n_ejemplares">Cantidad ejemplares:</label>
+                                    <input type="number" id="n_ejemplares" class="form-control"
+                                        placeholder="numero de ejemplares" name="cant">
+                                    <br>
+                                    <input type="submit" value="Devolver" class="form-control">
+                                </form>
 
 
-    <h2>Ver historial</h2>
-    <form action="historial" method="post">
-        {% csrf_token %}
-        <input type="submit" value="ver historial">
-    </form>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="anadir_tab">
 
-    <section {{notificacion.parametros}}>
+                                <h2>añadir material</h2>
+                                <form action="addMaterial" method="post" class="form-group">
+                                    {% csrf_token %}
+                                    <label for="id_material">Id del material:</label>
+                                    <input type="text" id="id_material" class="form-control" placeholder="Id material"
+                                        name="id_material" required readonly>
+                                    <label for="id_material">Cantidad para añadir:</label>
+                                    <input type="number" class="form-control" placeholder="cantidad" name="cant">
+                                    <br>
+                                    <input type="submit" value="Añadir" class="form-control">
+                                </form>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <section id='{{notificacion.parametros.id}}'>
         {{notificacion.mensaje}}
     </section>
 </body>
@@ -169,5 +243,17 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
+
+
+<script>
+    function pasarID(id) {
+
+        document.querySelectorAll('#id_material').forEach(elemt => {
+
+            elemt.value = id
+        })
+    }
+
+</script>
 
 </html>
